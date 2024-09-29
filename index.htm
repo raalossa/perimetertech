@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERIMETER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        
+        .container{
+            width: 100%;
+
+            text-align: center;
+            font-family: "Share Tech Mono", monospace;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .image1{
+            width: 50%;
+        }
+        .c1{
+              text-align: center;
+        }
+        .c2{
+            width: 25%;
+        }
+        .row1{
+            width: 50%;
+            margin-left: 25%;
+        }
+        .table1{
+            width: 80%;
+            margin-left: 10%;
+
+        }
+        input{
+            width: 80px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+        <h1>CALCULADOR DE PERIMETROS</h1>
+        <p>Esta herramienta permite calcular el perímetro de un plano, ubicando de manera separada en los cuadros cada una de las dimensiones que lo componen. Si se tienen varias dimensiones repetidas en el plano, se puede colocar en "cantidad" y de esta manera se calcularán de una vez. </p>
+        <p>Las lineas que terminen en curva, deben ser incluidas de manera separada, la línea va hasta donde comienza la curva y en la curva se coloca su radio y el ángulo que tenga</p>
+        <p>En las dimensiones "Longitud" y "Diámetro  se puede ignorar el valor "Ángulo", ya que este no se tiene en cuenta en el cálculo.</p>
+        <p>Una vez definida cada dimensión (Longitud, Radio o Diametro) se debe obturar el botón "Agregar", para que esta entre en el cálculo global.</p>
+        <p>Una vez estén todas las dimensiones del plano, se debe obturar el boton "CALCULAR", y este entregará el valor total del perímetro.</p>
+        <P>La gráfica que se presenta es una guía para identificar diferentes tipos de dimensiones.</P>
+
+        <div class="container">
+        <img class="image1" src="/IMAGES/SCHEME1.jpg" alt="SCHEME">
+</div>
+
+            <table class="table1">
+                <tr class="">
+
+                    <td class="c1">Tipo</td>
+                    <td class="c1">Longitud (mm)</td>
+                    <td class="c1">Ángulo(Radio)</td>
+                    <td class="c1">Cantidad</td>
+                    <td class="c2">Perimetro</td>
+                    <td class="c1"></td>
+                    <td class="c1"></td>
+                </tr>
+            
+                <tr class="">
+
+                    <td ><select class="c1" name="Leter" id="type" onselect="">
+                        <option value="Longitud">Longitud</option>
+                        <option value="Radio">Radio</option>
+                        <option value="Diámetro">Diámetro</option>
+                    </select></td>
+                    <td ><input class="c1" type="number" value="0" id="adim"></td>
+                    <td ><input class="c1" type="number" value="90" id="angu"></td>
+                    <td ><input class="c1" type="number" value="1" id="aq"></td>
+                    <td class="c2" id="ap"></td>
+
+                    <td><button onclick="agregar()">Agregar</button></td>
+                </tr>
+
+
+
+            </table>
+
+<div class="container">
+    <div id="resultado"></div>
+    <div id="newtr"></div>
+
+    <div >
+        <h2 id="periTot"></h2>
+        <button onclick="calculoTot()">CALCULAR</button>
+    </div>
+</div>
+
+    
+</div>
+</body>
+
+<script>
+
+    const registros = [];
+
+    const a = document.getElementById("adim").value;
+        const type = document.getElementById("type").value;
+        const angu = document.getElementById("angu").value;
+        const aq = document.getElementById("aq").value;
+
+
+
+    function agregar(){
+    const a = document.getElementById("adim").value;
+    const type = document.getElementById("type").value;
+    const angu = document.getElementById("angu").value;
+    const aq = document.getElementById("aq").value;
+
+    var peri = 0;
+        var angu2= angu;
+
+    console.log("The value a: ", a);
+    console.log(type);
+    console.log("The q :", aq);
+
+
+    switch(type){
+        case "Longitud":
+            peri = parseFloat(a)*parseFloat(aq);
+            console.log("Longitud: ",peri);
+            angu2 = (angu - angu);
+        break;
+    
+        case "Radio":
+            peri = ((2*Math.PI*parseFloat(a)*parseFloat(angu))/360)*aq;
+            console.log("Perimetro Curva: ",peri);
+            angu2 = (angu);
+        break;
+        case "Diámetro":
+            peri = ((2*Math.PI*parseFloat(a/2)))*aq;
+            console.log("Perimetro Circulo: ",peri);
+            angu2 = (angu - angu);
+        break;
+        
+        default:
+            console.log("Error no especificado");
+
+        }
+
+
+
+        const nuevoRegistro ={
+            type:type,
+            a:a, 
+            angu:angu2,
+            aq:aq,
+            peri:peri.toFixed(2)   
+                     
+        } 
+
+        
+
+    
+    document.getElementById("ap").textContent = peri.toFixed(2);
+    console.log(peri)
+    
+
+
+
+
+
+        registros.push(nuevoRegistro);
+        console.log(registros);
+
+
+
+
+        const registrosList = document.getElementById("resultado");
+        registrosList.innerHTML = "";
+
+        registros.forEach (registro => {
+            const listItem = document.createElement("ul");
+            listItem.textContent = `
+            
+                ${registro.type} 
+                Dimensión: ${registro.a} 
+                Ángulo: ${registro.angu}
+                Cantidad: ${registro.aq} 
+                Perimetro: ${registro.peri}
+                        `;
+            registrosList.appendChild(listItem);
+
+
+
+        })
+
+
+    };
+
+    function calculoTot (){
+            let pre = 0;
+            console.log("reg desde Tot", registros)
+            var qreg = (registros.length)
+            console.log("Cant De Registros:",qreg)
+
+            for (let i=0; i<qreg; i++ ){
+
+            console.log(i);
+            console.log(registros[i].peri)
+            let perTot = registros[i].peri
+            pre = parseFloat( perTot) + parseFloat( pre)
+            };
+            console.log("Perimetro total es: ", pre)
+
+
+            document.getElementById("periTot").textContent = `El Perimetro es: ${pre.toFixed(2)} mm.`;
+        }
+
+
+</script>
+</html>
